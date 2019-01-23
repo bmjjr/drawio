@@ -589,6 +589,11 @@
 			editorUi.openLink('https://about.draw.io/support/');
 		});
 
+		editorUi.actions.addAction('portal...', function()
+		{
+			editorUi.openLink('https://bq.local.proxy:8000/app/portal');
+		});
+
 		editorUi.actions.addAction('exportOptionsDisabled...', function()
 		{
 			editorUi.handleError({message: mxResources.get('exportOptionsDisabledDetails')},
@@ -2623,6 +2628,13 @@
 			}
 		})));
 
+		// Add bomquote to view menu
+		this.put('bomquote', new Menu(mxUtils.bind(this, function(menu, parent)
+		{
+			this.addMenuItem(menu, 'portal', parent);
+
+		})));
+
 		this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
 			if (urlParams['embed'] == '1')
@@ -2657,30 +2669,30 @@
 					{
 						this.addMenuItems(menu, ['exportOptionsDisabled'], parent);
 					}
-					
+
 					this.addMenuItems(menu, ['save', '-', 'share'], parent);
-					
+
 					var item = this.addMenuItem(menu, 'synchronize', parent);
-					
+
 					if (!editorUi.isOffline() || mxClient.IS_CHROMEAPP)
 					{
 						this.addLinkToItem(item, 'https://desk.draw.io/support/solutions/articles/16000087947');
 					}
-					
+
 					menu.addSeparator(parent);
 				}
 				else
 				{
 					this.addMenuItems(menu, ['new'], parent);
 				}
-				
+
 				this.addSubmenu('openFrom', menu, parent);
 
 				if (isLocalStorage)
 				{
 					this.addSubmenu('openRecent', menu, parent);
 				}
-				
+
 				if (file != null && file.constructor == DriveFile)
 				{
 					this.addMenuItems(menu, ['new', '-', 'rename', 'makeCopy', 'moveToFolder'], parent);
@@ -2689,18 +2701,18 @@
 				{
 					if (!mxClient.IS_CHROMEAPP && !EditorUi.isElectronApp &&
 						file != null && file.constructor != LocalFile)
-					{	
+					{
 						menu.addSeparator(parent);
 						var item = this.addMenuItem(menu, 'synchronize', parent);
-						
+
 						if (!editorUi.isOffline() || mxClient.IS_CHROMEAPP)
 						{
 							this.addLinkToItem(item, 'https://desk.draw.io/support/solutions/articles/16000087947');
 						}
 					}
-					
+
 					this.addMenuItems(menu, ['-', 'save', 'saveAs'], parent);
-					
+
 					this.addMenuItems(menu, ['-', 'rename'], parent);
 
 					if (editorUi.isOfflineApp())
@@ -2713,14 +2725,14 @@
 					else
 					{
 						this.addMenuItems(menu, ['makeCopy'], parent);
-						
+
 						if (file != null && file.constructor == OneDriveFile)
 						{
 							this.addMenuItems(menu, ['moveToFolder'], parent);
 						}
 					}
 				}
-				
+
 				menu.addSeparator(parent);
 				this.addSubmenu('importFrom', menu, parent);
 				this.addSubmenu('exportAs', menu, parent);
@@ -2730,20 +2742,20 @@
 				menu.addSeparator(parent);
 				this.addSubmenu('newLibrary', menu, parent);
 				this.addSubmenu('openLibraryFrom', menu, parent);
-				
+
 				if (file != null && file.isRevisionHistorySupported())
 				{
 					this.addMenuItems(menu, ['-', 'revisionHistory'], parent);
 				}
-				
+
 				this.addMenuItems(menu, ['-', 'pageSetup'], parent);
-				
+
 				// Cannot use print in standalone mode on iOS as we cannot open new windows
 				if (!mxClient.IS_IOS || !navigator.standalone)
 				{
 					this.addMenuItems(menu, ['print'], parent);
 				}
-				
+
 				this.addMenuItems(menu, ['-', 'close']);
 			}
 		})));
